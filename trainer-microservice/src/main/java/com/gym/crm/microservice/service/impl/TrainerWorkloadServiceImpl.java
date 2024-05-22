@@ -37,10 +37,11 @@ public class TrainerWorkloadServiceImpl implements TrainerWorkloadService {
 
         YearlySummary yearlySummary = getYearlySummary(trainerWorkload, yearMonth);
         MonthlySummary monthlySummary = getMonthlySummary(yearlySummary, yearMonth);
-        updateMonthlySummary(request, monthlySummary);
 
+        updateMonthlySummary(request, monthlySummary);
         trainerWorkloadRepo.save(trainerWorkload);
     }
+
 
 
     private TrainerWorkload getTrainerWorkload(TrainerWorkloadRequestDTO requestDto,
@@ -74,19 +75,6 @@ public class TrainerWorkloadServiceImpl implements TrainerWorkloadService {
                 });
     }
 
-    private MonthlySummary getMonthlySummary(YearlySummary yearlySummary, YearMonth yearMonth) {
-        return yearlySummary.getMonthlySummaries()
-                .stream()
-                .filter(m -> m.getMonth().getValue() == yearMonth.getMonthValue())
-                .findFirst()
-                .orElseGet(() -> {
-                    MonthlySummary ms = new MonthlySummary();
-                    ms.setMonth(yearMonth.getMonth());
-                    yearlySummary.getMonthlySummaries().add(ms); //working minutes is oooo
-                    return ms;
-                });
-    }
-
     private void updateMonthlySummary(TrainerWorkloadRequestDTO request, MonthlySummary monthlySummary) {
         ActionType actionType = request.getActionType();
         if (actionType.equals(ActionType.ADD)) {
@@ -95,6 +83,20 @@ public class TrainerWorkloadServiceImpl implements TrainerWorkloadService {
             int minutes = Math.min(0, (monthlySummary.getWorkMinutes() - request.getDurationMin()));
             monthlySummary.setWorkMinutes(minutes);
         }
+    }
+
+    private MonthlySummary getMonthlySummary(YearlySummary yearlySummary, YearMonth yearMonth) {
+        return yearlySummary.getMonthlySummaries()
+                .stream()
+                .filter(m -> m.getMonth().getValue() == yearMonth.getMonthValue())
+                .findFirst()
+                .orElseGet(() -> {
+                    MonthlySummary ms = new MonthlySummary();
+                    ms.setMonth(yearMonth.getMonth());
+                    ms.setWorkMinutes(0);
+                    yearlySummary.getMonthlySummaries().add(ms);
+                    return ms;
+                });
     }
 
 }
