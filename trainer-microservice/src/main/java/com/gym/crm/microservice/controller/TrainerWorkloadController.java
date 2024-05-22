@@ -16,16 +16,16 @@ public class TrainerWorkloadController {
     @Autowired
     private TrainerWorkloadService trainerWorkloadService;
 
-
     @GetMapping("/{username}")
     public ResponseEntity<TrainerWorkload> workSummary(@PathVariable("username") String username) {
+        log.info("GET method called for username: {}", username);
         return ResponseEntity.ok(trainerWorkloadService.findByUsername(username));
     }
 
     @PostMapping()
     public ResponseEntity<Void> handleTrainerWorkload(@RequestBody TrainerWorkloadRequestDTO trainerWorkloadRequestDTO) {
         try {
-            log.info("post method called");
+            log.info("POST method called with payload: {}", trainerWorkloadRequestDTO);
             trainerWorkloadService.handleTrainerWorkload(trainerWorkloadRequestDTO);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
