@@ -20,7 +20,7 @@ public class LoggingConfig {
     public void logAfterReturning(JoinPoint joinPoint, Object result) {
         String className = joinPoint.getTarget().getClass().getSimpleName();
         String methodName = joinPoint.getSignature().getName();
-        String response = result.toString();
+        String response = (result != null) ? result.toString() : "null";
         log.info("Transaction ID: {}, Service: {}, Method: {}, Response: {}", transactionId.get(), className, methodName, response);
         transactionId.remove();
     }

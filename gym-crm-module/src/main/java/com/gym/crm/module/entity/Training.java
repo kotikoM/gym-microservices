@@ -10,7 +10,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "training")
@@ -31,7 +31,7 @@ public class Training {
     @Column(name = "training_type_id")
     private Integer trainingTypeId;
     @Column(name = "date")
-    private Date date;
+    private LocalDate date;
     @Column(name = "duration")
     private Integer duration;
 }
