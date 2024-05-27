@@ -113,10 +113,8 @@
             <version>4.1.1</version>
         </dependency>
         <dependency>
-            <groupId>com.gym.crm</groupId>
-            <artifactId>trainer-microservice</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-            <scope>compile</scope>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-activemq</artifactId>
         </dependency>
     </dependencies>
     <build>

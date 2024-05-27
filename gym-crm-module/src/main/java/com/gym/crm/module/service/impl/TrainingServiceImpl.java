@@ -1,7 +1,7 @@
 package com.gym.crm.module.service.impl;
 
-import com.gym.crm.microservice.DTO.TrainerWorkloadRequestDTO;
-import com.gym.crm.microservice.constant.ActionType;
+import com.gym.crm.module.DTO.TrainerWorkloadRequestDTO;
+import com.gym.crm.module.DTO.ActionType;
 import com.gym.crm.module.client.TrainerWorkloadClient;
 import com.gym.crm.module.entity.Trainer;
 import com.gym.crm.module.entity.Training;
@@ -12,7 +12,7 @@ import com.gym.crm.module.repository.UserRepo;
 import com.gym.crm.module.service.TrainingService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.jms.core.JmsTemplate;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -31,6 +31,8 @@ public class TrainingServiceImpl implements TrainingService {
     private TrainingRepo trainingRepo;
     @Autowired
     private TrainerWorkloadClient trainerWorkloadClient;
+    @Autowired
+    private JmsTemplate jmsTemplate;
 
     public Training createTraining(Training training) {
         log.info("Creating new training: {}", training);
@@ -55,10 +57,7 @@ public class TrainingServiceImpl implements TrainingService {
                 username, firstName, lastName, isActive, date, durationMin, ActionType.ADD
         );
 
-        ResponseEntity<Void> response = trainerWorkloadClient.handleTrainerWorkload(trainerDTO);
-        if (!response.getStatusCode().is2xxSuccessful()) {
-            throw new RuntimeException("Failed to call trainer microservice");
-        }
+        jmsTemplate.convertAndSend("trainer-workload-queue", trainerDTO);
     }
 
 

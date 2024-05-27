@@ -1,6 +1,6 @@
 package com.gym.crm.module.client;
 
-import com.gym.crm.microservice.DTO.TrainerWorkloadRequestDTO;
+import com.gym.crm.module.DTO.TrainerWorkloadRequestDTO;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
