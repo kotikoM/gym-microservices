@@ -5,21 +5,26 @@ import com.gym.crm.microservice.constant.ActionType;
 import com.gym.crm.microservice.model.MonthlySummary;
 import com.gym.crm.microservice.model.TrainerWorkload;
 import com.gym.crm.microservice.model.YearlySummary;
-import com.gym.crm.microservice.repository.TrainerWorkloadRepository;
+import com.gym.crm.microservice.repository.TrainerWorkloadRepositoryMongo;
 import com.gym.crm.microservice.service.TrainerWorkloadService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.Year;
 import java.time.YearMonth;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Optional;
 
 @Service
 public class TrainerWorkloadServiceImpl implements TrainerWorkloadService {
 
     @Autowired
-    private TrainerWorkloadRepository trainerWorkloadRepo;
+    private TrainerWorkloadRepositoryMongo trainerWorkloadRepo;
+
+    public List<TrainerWorkload> findAll(){
+        return trainerWorkloadRepo.findAll();
+    }
+
 
     @Override
     public TrainerWorkload findByUsername(String username) {
@@ -56,21 +61,21 @@ public class TrainerWorkloadServiceImpl implements TrainerWorkloadService {
             trainer.setFirstName(requestDto.getFirstName());
             trainer.setLastName(requestDto.getLastName());
             trainer.setStatus(requestDto.getIsActive());
-            trainer.setYearlySummaries(new HashSet<>());
+            trainer.setYears(new HashSet<>());
         }
         return trainer;
     }
 
     private YearlySummary getYearlySummary(TrainerWorkload trainerWorkload, YearMonth yearMonth) {
-        return trainerWorkload.getYearlySummaries()
+        return trainerWorkload.getYears()
                 .stream()
-                .filter(y -> y.getYear().getValue() == yearMonth.getYear())
+                .filter(y -> y.getYear() == yearMonth.getYear())
                 .findFirst()
                 .orElseGet(() -> {
                     YearlySummary ys = new YearlySummary();
-                    ys.setYear(Year.from(yearMonth));
-                    ys.setMonthlySummaries(new HashSet<>());
-                    trainerWorkload.getYearlySummaries().add(ys);
+                    ys.setYear(yearMonth.getYear());
+                    ys.setMonths(new HashSet<>());
+                    trainerWorkload.getYears().add(ys);
                     return ys;
                 });
     }
@@ -86,15 +91,15 @@ public class TrainerWorkloadServiceImpl implements TrainerWorkloadService {
     }
 
     private MonthlySummary getMonthlySummary(YearlySummary yearlySummary, YearMonth yearMonth) {
-        return yearlySummary.getMonthlySummaries()
+        return yearlySummary.getMonths()
                 .stream()
-                .filter(m -> m.getMonth().getValue() == yearMonth.getMonthValue())
+                .filter(m -> m.getMonth() == yearMonth.getMonthValue())
                 .findFirst()
                 .orElseGet(() -> {
                     MonthlySummary ms = new MonthlySummary();
-                    ms.setMonth(yearMonth.getMonth());
+                    ms.setMonth(yearMonth.getMonth().getValue());
                     ms.setWorkMinutes(0);
-                    yearlySummary.getMonthlySummaries().add(ms);
+                    yearlySummary.getMonths().add(ms);
                     return ms;
                 });
     }

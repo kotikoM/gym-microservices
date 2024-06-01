@@ -9,12 +9,20 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/trainers")
 @Slf4j
 public class TrainerWorkloadController {
     @Autowired
     private TrainerWorkloadService trainerWorkloadService;
+
+    @GetMapping()
+    public ResponseEntity<List<TrainerWorkload>> findAll() {
+        log.info("Getting every trainer workload");
+        return ResponseEntity.ok(trainerWorkloadService.findAll());
+    }
 
     @GetMapping("/{username}")
     public ResponseEntity<TrainerWorkload> workSummary(@PathVariable("username") String username) {

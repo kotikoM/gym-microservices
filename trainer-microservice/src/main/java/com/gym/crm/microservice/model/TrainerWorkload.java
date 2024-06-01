@@ -1,22 +1,21 @@
 package com.gym.crm.microservice.model;
 
-import jakarta.persistence.Entity;
-import lombok.AllArgsConstructor;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 import java.util.Set;
 
-
-@Entity
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
+@Document(collection = "TrainerWorkload")
 public class TrainerWorkload {
-    private Long id;
+
+    @Id
+    private String id;
     private String username;
     private String firstName;
     private String lastName;
-    private Boolean status;
-    private Set<YearlySummary> yearlySummaries;
+    private boolean status;
+    private Set<YearlySummary> years;
 }
+
