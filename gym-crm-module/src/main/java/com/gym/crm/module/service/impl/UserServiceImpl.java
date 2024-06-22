@@ -18,10 +18,9 @@ public class UserServiceImpl implements UserService {
     }
 
     public void updatePassword(String userName, String oldPassword, String newPassword) {
-        User user = userRepo.findByUsername(userName);
-
         if (checkPassword(userName, oldPassword)) {
             log.info("Updating user password");
+            User user = userRepo.findByUsername(userName);
             user.setPassword(newPassword);
             userRepo.save(user);
         } else {
