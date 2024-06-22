@@ -1,6 +1,6 @@
-package com.gym.crm.module.DTO;
+package com.gym.crm.module.dto;
 
-import com.gym.crm.module.entity.Trainee;
+import com.gym.crm.module.entity.Trainer;
 import com.gym.crm.module.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -9,7 +9,7 @@ import java.util.List;
 
 @Data
 @AllArgsConstructor
-public class TrainerProfileDTO {
+public class TraineeProfileDto {
     private User user;
-    private List<Trainee> trainees;
+    private List<Trainer> trainers;
 }

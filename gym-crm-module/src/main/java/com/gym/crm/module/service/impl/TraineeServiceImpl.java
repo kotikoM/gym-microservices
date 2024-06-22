@@ -1,7 +1,7 @@
 package com.gym.crm.module.service.impl;
 
-import com.gym.crm.module.DTO.RegistrationResponseDTO;
-import com.gym.crm.module.DTO.TraineeProfileDTO;
+import com.gym.crm.module.dto.RegistrationResponseDto;
+import com.gym.crm.module.dto.TraineeProfileDto;
 import com.gym.crm.module.entity.Trainee;
 import com.gym.crm.module.entity.Trainer;
 import com.gym.crm.module.entity.User;
@@ -30,7 +30,7 @@ public class TraineeServiceImpl implements TraineeService {
     @Autowired
     private UserDetailsGenerator userDetailsGenerator;
 
-    public RegistrationResponseDTO registerTrainee(String firstName, String lastName, Date dateOfBirth, String address) {
+    public RegistrationResponseDto registerTrainee(String firstName, String lastName, Date dateOfBirth, String address) {
         log.info("Registering trainee...");
         String username = userDetailsGenerator.generateUsername(firstName, lastName);
         String password = userDetailsGenerator.generatePassword();
@@ -38,14 +38,14 @@ public class TraineeServiceImpl implements TraineeService {
         User savedUser = userRepo.save(user);
         Trainee trainee = new Trainee(null, dateOfBirth, address, savedUser.getId());
         traineeRepo.save(trainee);
-        return new RegistrationResponseDTO(user.getUsername(), user.getPassword());
+        return new RegistrationResponseDto(user.getUsername(), user.getPassword());
     }
 
-    public TraineeProfileDTO getTraineeProfile(String username) {
+    public TraineeProfileDto getTraineeProfile(String username) {
         User user = userRepo.findByUsername(username);
         List<Trainer> trainers = trainerRepo.findTrainersOfTrainee(username);
         log.info("Trainee profile information fetched");
-        return new TraineeProfileDTO(user, trainers);
+        return new TraineeProfileDto(user, trainers);
     }
 
     public void updateTrainee(String userName, String firstName, String lastName, Date dateOfBirth, String address, Boolean isActive) {

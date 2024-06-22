@@ -1,16 +1,17 @@
 package com.gym.crm.microservice.service;
 
-import com.gym.crm.microservice.DTO.TrainerWorkloadRequestDTO;
+import com.gym.crm.microservice.dto.TrainerWorkloadRequestDto;
 import com.gym.crm.microservice.model.TrainerWorkload;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface TrainerWorkloadService {
 
     List<TrainerWorkload> findAll();
 
-    TrainerWorkload findByUsername(String username);
+    Optional<TrainerWorkload> findByUsername(String username);
 
-    void handleTrainerWorkload(TrainerWorkloadRequestDTO trainerWorkloadRequestDTO);
+    void handleTrainerWorkload(TrainerWorkloadRequestDto trainerWorkloadRequestDTO);
 
 }

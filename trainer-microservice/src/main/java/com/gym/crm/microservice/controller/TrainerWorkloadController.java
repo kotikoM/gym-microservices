@@ -1,6 +1,6 @@
 package com.gym.crm.microservice.controller;
 
-import com.gym.crm.microservice.DTO.TrainerWorkloadRequestDTO;
+import com.gym.crm.microservice.dto.TrainerWorkloadRequestDto;
 import com.gym.crm.microservice.model.TrainerWorkload;
 import com.gym.crm.microservice.service.TrainerWorkloadService;
 import lombok.extern.slf4j.Slf4j;
@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/trainers")
@@ -27,11 +28,18 @@ public class TrainerWorkloadController {
     @GetMapping("/{username}")
     public ResponseEntity<TrainerWorkload> workSummary(@PathVariable("username") String username) {
         log.info("GET method called for username: {}", username);
-        return ResponseEntity.ok(trainerWorkloadService.findByUsername(username));
+
+        Optional<TrainerWorkload> trainerWorkloadOpt = trainerWorkloadService.findByUsername(username);
+        if (trainerWorkloadOpt.isPresent()) {
+            return ResponseEntity.ok(trainerWorkloadOpt.get());
+        } else {
+            log.warn("TrainerWorkload not found for username: {}", username);
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @PostMapping()
-    public ResponseEntity<Void> handleTrainerWorkload(@RequestBody TrainerWorkloadRequestDTO trainerWorkloadRequestDTO) {
+    public ResponseEntity<Void> handleTrainerWorkload(@RequestBody TrainerWorkloadRequestDto trainerWorkloadRequestDTO) {
         try {
             log.info("POST method called with payload: {}", trainerWorkloadRequestDTO);
             trainerWorkloadService.handleTrainerWorkload(trainerWorkloadRequestDTO);

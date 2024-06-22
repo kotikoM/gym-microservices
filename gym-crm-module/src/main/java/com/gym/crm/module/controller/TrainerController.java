@@ -1,7 +1,7 @@
 package com.gym.crm.module.controller;
 
-import com.gym.crm.module.DTO.RegistrationResponseDTO;
-import com.gym.crm.module.DTO.TrainerProfileDTO;
+import com.gym.crm.module.dto.RegistrationResponseDto;
+import com.gym.crm.module.dto.TrainerProfileDto;
 import com.gym.crm.module.entity.Trainer;
 import com.gym.crm.module.service.TrainerService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -26,12 +26,12 @@ public class TrainerController {
             description = "Registers a new trainer with the provided details.")
     @ApiResponse(responseCode = "200", description = "Successful registration",
             content = @Content(mediaType = "application/json",
-                    schema = @Schema(implementation = RegistrationResponseDTO.class)))
-    public ResponseEntity<RegistrationResponseDTO> registerTrainer(
+                    schema = @Schema(implementation = RegistrationResponseDto.class)))
+    public ResponseEntity<RegistrationResponseDto> registerTrainer(
             @RequestParam String firstName,
             @RequestParam String lastName,
             @RequestParam Integer trainingTypeId) {
-        RegistrationResponseDTO dto = trainerService.registerTrainer(firstName, lastName, trainingTypeId);
+        RegistrationResponseDto dto = trainerService.registerTrainer(firstName, lastName, trainingTypeId);
         return ResponseEntity.ok(dto);
     }
 
@@ -40,9 +40,9 @@ public class TrainerController {
             description = "Retrieves the profile of the trainer associated with the provided username.")
     @ApiResponse(responseCode = "200", description = "Trainer profile retrieved successfully",
             content = @Content(mediaType = "application/json",
-                    schema = @Schema(implementation = TrainerProfileDTO.class)))
-    public ResponseEntity<TrainerProfileDTO> getTrainerProfile(@RequestParam String username) {
-        TrainerProfileDTO response = trainerService.getTrainerProfile(username);
+                    schema = @Schema(implementation = TrainerProfileDto.class)))
+    public ResponseEntity<TrainerProfileDto> getTrainerProfile(@RequestParam String username) {
+        TrainerProfileDto response = trainerService.getTrainerProfile(username);
         return ResponseEntity.ok(response);
     }
 
@@ -62,15 +62,15 @@ public class TrainerController {
             description = "Updates the profile of the trainer associated with the provided username.")
     @ApiResponse(responseCode = "200", description = "Trainer profile updated successfully",
             content = @Content(mediaType = "application/json",
-                    schema = @Schema(implementation = TrainerProfileDTO.class)))
-    public ResponseEntity<TrainerProfileDTO> updateTrainerProfile(
+                    schema = @Schema(implementation = TrainerProfileDto.class)))
+    public ResponseEntity<TrainerProfileDto> updateTrainerProfile(
             @RequestParam String userName,
             @RequestParam String firstName,
             @RequestParam String lastName,
             @RequestParam Integer specialization,
             @RequestParam Boolean isActive) {
         trainerService.updateTrainer(userName, firstName, lastName, specialization, isActive);
-        TrainerProfileDTO trainerProfile = trainerService.getTrainerProfile(userName);
+        TrainerProfileDto trainerProfile = trainerService.getTrainerProfile(userName);
         return ResponseEntity.ok(trainerProfile);
     }
 

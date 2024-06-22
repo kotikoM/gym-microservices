@@ -1,4 +1,4 @@
-package com.gym.crm.module.DTO;
+package com.gym.crm.module.dto;
 
 public enum ActionType {
     ADD,

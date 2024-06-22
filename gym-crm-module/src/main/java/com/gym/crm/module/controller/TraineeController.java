@@ -1,6 +1,6 @@
 package com.gym.crm.module.controller;
-import com.gym.crm.module.DTO.RegistrationResponseDTO;
-import com.gym.crm.module.DTO.TraineeProfileDTO;
+import com.gym.crm.module.dto.RegistrationResponseDto;
+import com.gym.crm.module.dto.TraineeProfileDto;
 import com.gym.crm.module.service.TraineeService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -24,13 +24,13 @@ public class TraineeController {
             description = "Registers a new trainee with the provided details.")
     @ApiResponse(responseCode = "200", description = "Successful registration",
             content = @Content(mediaType = "application/json",
-                    schema = @Schema(implementation = RegistrationResponseDTO.class)))
-    public ResponseEntity<RegistrationResponseDTO> registerTrainee(
+                    schema = @Schema(implementation = RegistrationResponseDto.class)))
+    public ResponseEntity<RegistrationResponseDto> registerTrainee(
             @RequestParam String firstName,
             @RequestParam String lastName,
             @RequestParam(required = false) Date dateOfBirth,
             @RequestParam(required = false) String address) {
-        RegistrationResponseDTO dto = traineeService.registerTrainee(firstName, lastName, dateOfBirth, address);
+        RegistrationResponseDto dto = traineeService.registerTrainee(firstName, lastName, dateOfBirth, address);
         return ResponseEntity.ok(dto);
     }
 
@@ -39,9 +39,9 @@ public class TraineeController {
             description = "Retrieves the profile of the trainee associated with the provided username.")
     @ApiResponse(responseCode = "200", description = "Trainee profile retrieved successfully",
             content = @Content(mediaType = "application/json",
-                    schema = @Schema(implementation = TraineeProfileDTO.class)))
-    public ResponseEntity<TraineeProfileDTO> getTraineeProfile(@RequestParam String username) {
-        TraineeProfileDTO response = traineeService.getTraineeProfile(username);
+                    schema = @Schema(implementation = TraineeProfileDto.class)))
+    public ResponseEntity<TraineeProfileDto> getTraineeProfile(@RequestParam String username) {
+        TraineeProfileDto response = traineeService.getTraineeProfile(username);
         return ResponseEntity.ok(response);
     }
 
@@ -59,8 +59,8 @@ public class TraineeController {
             description = "Updates the profile of the trainee associated with the provided username.")
     @ApiResponse(responseCode = "200", description = "Trainee profile updated successfully",
             content = @Content(mediaType = "application/json",
-                    schema = @Schema(implementation = TraineeProfileDTO.class)))
-    public ResponseEntity<TraineeProfileDTO> updateTraineeProfile(
+                    schema = @Schema(implementation = TraineeProfileDto.class)))
+    public ResponseEntity<TraineeProfileDto> updateTraineeProfile(
             @RequestParam String userName,
             @RequestParam String firstName,
             @RequestParam String lastName,
@@ -68,7 +68,7 @@ public class TraineeController {
             @RequestParam String address,
             @RequestParam Boolean isActive) {
         traineeService.updateTrainee(userName, firstName, lastName, dateOfBirth, address, isActive);
-        TraineeProfileDTO response = traineeService.getTraineeProfile(userName);
+        TraineeProfileDto response = traineeService.getTraineeProfile(userName);
         return ResponseEntity.ok(response);
     }
 

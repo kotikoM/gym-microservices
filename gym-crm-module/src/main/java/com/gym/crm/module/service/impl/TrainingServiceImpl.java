@@ -1,7 +1,7 @@
 package com.gym.crm.module.service.impl;
 
-import com.gym.crm.module.DTO.TrainerWorkloadRequestDTO;
-import com.gym.crm.module.DTO.ActionType;
+import com.gym.crm.module.dto.TrainerWorkloadRequestDto;
+import com.gym.crm.module.dto.ActionType;
 import com.gym.crm.module.client.TrainerWorkloadClient;
 import com.gym.crm.module.entity.Trainer;
 import com.gym.crm.module.entity.Training;
@@ -53,7 +53,7 @@ public class TrainingServiceImpl implements TrainingService {
         LocalDate date = training.getDate();
         Integer durationMin = training.getDuration();
 
-        TrainerWorkloadRequestDTO trainerDTO = new TrainerWorkloadRequestDTO(
+        TrainerWorkloadRequestDto trainerDTO = new TrainerWorkloadRequestDto(
                 username, firstName, lastName, isActive, date, durationMin, ActionType.ADD
         );
 

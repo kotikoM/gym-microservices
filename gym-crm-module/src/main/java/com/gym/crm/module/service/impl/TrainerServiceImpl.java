@@ -1,7 +1,7 @@
 package com.gym.crm.module.service.impl;
 
-import com.gym.crm.module.DTO.RegistrationResponseDTO;
-import com.gym.crm.module.DTO.TrainerProfileDTO;
+import com.gym.crm.module.dto.RegistrationResponseDto;
+import com.gym.crm.module.dto.TrainerProfileDto;
 import com.gym.crm.module.entity.Trainee;
 import com.gym.crm.module.entity.Trainer;
 import com.gym.crm.module.entity.User;
@@ -29,7 +29,7 @@ public class TrainerServiceImpl implements TrainerService {
     @Autowired
     private UserDetailsGenerator userDetailsGenerator;
 
-    public RegistrationResponseDTO registerTrainer(String firstName, String lastName, Integer trainingTypeId) {
+    public RegistrationResponseDto registerTrainer(String firstName, String lastName, Integer trainingTypeId) {
         log.info("Registering trainer...");
         String username = userDetailsGenerator.generateUsername(firstName, lastName);
         String password = userDetailsGenerator.generatePassword();
@@ -37,7 +37,7 @@ public class TrainerServiceImpl implements TrainerService {
         User savedUser = userRepo.save(user);
         Trainer trainer = new Trainer(null, trainingTypeId, savedUser.getId());
         trainerRepo.save(trainer);
-        return new RegistrationResponseDTO(savedUser.getUsername(), savedUser.getPassword());
+        return new RegistrationResponseDto(savedUser.getUsername(), savedUser.getPassword());
     }
 
 
@@ -46,11 +46,11 @@ public class TrainerServiceImpl implements TrainerService {
         return trainerRepo.findUnassignedTrainers(traineeUsername);
     }
 
-    public TrainerProfileDTO getTrainerProfile(String username) {
+    public TrainerProfileDto getTrainerProfile(String username) {
         User user = userRepo.findByUsername(username);
         List<Trainee> trainees = traineeRepo.findTraineesOfTrainer(username);
         log.info("Trainer profile fetched");
-        return new TrainerProfileDTO(user, trainees);
+        return new TrainerProfileDto(user, trainees);
     }
 
 

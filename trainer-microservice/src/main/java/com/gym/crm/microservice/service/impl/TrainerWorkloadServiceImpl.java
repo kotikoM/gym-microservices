@@ -1,6 +1,6 @@
 package com.gym.crm.microservice.service.impl;
 
-import com.gym.crm.microservice.DTO.TrainerWorkloadRequestDTO;
+import com.gym.crm.microservice.dto.TrainerWorkloadRequestDto;
 import com.gym.crm.microservice.constant.ActionType;
 import com.gym.crm.microservice.model.MonthlySummary;
 import com.gym.crm.microservice.model.TrainerWorkload;
@@ -27,16 +27,15 @@ public class TrainerWorkloadServiceImpl implements TrainerWorkloadService {
 
 
     @Override
-    public TrainerWorkload findByUsername(String username) {
-        return trainerWorkloadRepo.findByUsername(username)
-                .orElse(null);
+    public Optional<TrainerWorkload> findByUsername(String username) {
+        return trainerWorkloadRepo.findByUsername(username);
     }
 
     @Override
-    public void handleTrainerWorkload(TrainerWorkloadRequestDTO request) {
+    public void handleTrainerWorkload(TrainerWorkloadRequestDto request) {
         String username = request.getUsername();
         Optional<TrainerWorkload> trainerOptional = trainerWorkloadRepo.findByUsername(username);
-        TrainerWorkload trainerWorkload = getTrainerWorkload(request, trainerOptional);
+        TrainerWorkload trainerWorkload = getTrainerWorkload(request, trainerOptional.orElse(null));
 
         YearMonth yearMonth = YearMonth.from(request.getTrainingDate());
 
@@ -49,21 +48,16 @@ public class TrainerWorkloadServiceImpl implements TrainerWorkloadService {
 
 
 
-    private TrainerWorkload getTrainerWorkload(TrainerWorkloadRequestDTO requestDto,
-                                               Optional<TrainerWorkload> trainerOptional) {
-        TrainerWorkload trainer;
-
-        if (trainerOptional.isPresent()) {
-            trainer = trainerOptional.get();
-        } else {
-            trainer = new TrainerWorkload();
-            trainer.setUsername(requestDto.getUsername());
-            trainer.setFirstName(requestDto.getFirstName());
-            trainer.setLastName(requestDto.getLastName());
-            trainer.setStatus(requestDto.getIsActive());
-            trainer.setYears(new HashSet<>());
+    private TrainerWorkload getTrainerWorkload(TrainerWorkloadRequestDto requestDto, TrainerWorkload trainerWorkload) {
+        if (trainerWorkload == null) {
+            trainerWorkload = new TrainerWorkload();
+            trainerWorkload.setUsername(requestDto.getUsername());
+            trainerWorkload.setFirstName(requestDto.getFirstName());
+            trainerWorkload.setLastName(requestDto.getLastName());
+            trainerWorkload.setStatus(requestDto.getIsActive());
+            trainerWorkload.setYears(new HashSet<>());
         }
-        return trainer;
+        return trainerWorkload;
     }
 
     private YearlySummary getYearlySummary(TrainerWorkload trainerWorkload, YearMonth yearMonth) {
@@ -80,11 +74,11 @@ public class TrainerWorkloadServiceImpl implements TrainerWorkloadService {
                 });
     }
 
-    private void updateMonthlySummary(TrainerWorkloadRequestDTO request, MonthlySummary monthlySummary) {
+    private void updateMonthlySummary(TrainerWorkloadRequestDto request, MonthlySummary monthlySummary) {
         ActionType actionType = request.getActionType();
-        if (actionType.equals(ActionType.ADD)) {
+        if (ActionType.ADD.equals(actionType)) {
             monthlySummary.setWorkMinutes(monthlySummary.getWorkMinutes() + request.getDurationMin());
-        } else if (actionType.equals(ActionType.DELETE)) {
+        } else if (ActionType.DELETE.equals(actionType)) {
             int minutes = Math.min(0, (monthlySummary.getWorkMinutes() - request.getDurationMin()));
             monthlySummary.setWorkMinutes(minutes);
         }

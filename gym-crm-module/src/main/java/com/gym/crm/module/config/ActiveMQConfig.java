@@ -3,8 +3,10 @@ package com.gym.crm.module.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.gym.crm.module.DTO.TrainerWorkloadRequestDTO;
+import com.gym.crm.module.dto.TrainerWorkloadRequestDto;
+import com.gym.crm.module.constants.AppConstants;
 import org.apache.activemq.ActiveMQConnectionFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.jms.annotation.EnableJms;
@@ -20,10 +22,13 @@ import java.util.Map;
 @EnableJms
 public class ActiveMQConfig {
 
+    @Value("${factory.brokerURL}")
+    private String brokerURL;
+
     @Bean
     public ActiveMQConnectionFactory activeMQConnectionFactory() {
         ActiveMQConnectionFactory factory = new ActiveMQConnectionFactory();
-        factory.setBrokerURL("tcp://localhost:61616");
+        factory.setBrokerURL(brokerURL);
         return factory;
     }
 
@@ -39,10 +44,10 @@ public class ActiveMQConfig {
     public MessageConverter jmsMessageConverter() {
         MappingJackson2MessageConverter converter = new MappingJackson2MessageConverter();
         converter.setTargetType(MessageType.TEXT);
-        converter.setTypeIdPropertyName("_type");
+        converter.setTypeIdPropertyName(AppConstants.TYPE_ID_PROPERTY_NAME);
         converter.setObjectMapper(objectMapper());
         Map<String, Class<?>> typeIdMappings = new HashMap<>();
-        typeIdMappings.put("TrainerWorkloadRequestDTO", TrainerWorkloadRequestDTO.class);
+        typeIdMappings.put(AppConstants.TRAINER_WORKLOAD_REQUEST_DTO, TrainerWorkloadRequestDto.class);
         converter.setTypeIdMappings(typeIdMappings);
         return converter;
     }
