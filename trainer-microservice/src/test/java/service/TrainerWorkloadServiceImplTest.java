@@ -1,10 +1,6 @@
-package com.gym.crm.microservice;
+package service;
 
-import com.gym.crm.microservice.dto.TrainerWorkloadRequestDto;
-import com.gym.crm.microservice.constant.ActionType;
-import com.gym.crm.microservice.model.MonthlySummary;
 import com.gym.crm.microservice.model.TrainerWorkload;
-import com.gym.crm.microservice.model.YearlySummary;
 import com.gym.crm.microservice.repository.TrainerWorkloadRepositoryMongo;
 import com.gym.crm.microservice.service.impl.TrainerWorkloadServiceImpl;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,8 +9,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
-import java.time.LocalDate;
-import java.util.HashSet;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
