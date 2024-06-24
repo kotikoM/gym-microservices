@@ -17,3 +17,4 @@ Scenario: Add workload for a trainer
       | username | trainingDate | durationMinutes | actionType |
       | john_doe | 2024-01-15   | 60              | DELETE     |
     Then the trainer's monthly summary for JANUARY 2024 should be updated to 0 minutes
+    

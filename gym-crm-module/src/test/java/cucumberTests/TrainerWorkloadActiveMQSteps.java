@@ -30,6 +30,7 @@ public class TrainerWorkloadActiveMQSteps {
 
     @Given("the gym-rest-api is running")
     public void gym_rest_api_is_running() {
+        assertNotNull(jmsTemplate);
     }
 
     @When("a TrainerWorkloadRequest is sent to the ActiveMQ queue")
