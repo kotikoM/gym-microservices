@@ -1,0 +1,72 @@
+services:
+  # MySQL service
+  db:
+    image: mysql:latest
+    container_name: mysql-container
+    environment:
+      MYSQL_ROOT_PASSWORD: Database2023
+      MYSQL_DATABASE: gym_crm
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  # MongoDB service
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb-container
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+
+  # ActiveMQ service
+  activemq:
+    image: rmohr/activemq:latest
+    container_name: activemq-container
+    ports:
+      - "8161:8161"
+      - "61616:61616"
+
+  # Discovery Server (Eureka)
+  discovery-server:
+    image: gym-crm-discovery-server:latest
+    container_name: discovery-server-container
+    ports:
+      - "8761:8761"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    depends_on:
+      - db
+      - mongodb
+      - activemq
+
+  # Main Microservice
+  gym-crm-main-microservice:
+    image: gym-crm-main-microservice:latest
+    container_name: gym-crm-main-container
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    depends_on:
+      - db
+      - discovery-server
+      - activemq
+
+  # Report Microservice
+  gym-crm-report-microservice:
+    image: gym-crm-report-microservice:latest
+    container_name: gym-crm-report-container
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+    depends_on:
+      - mongodb
+      - discovery-server
+      - activemq
+
+volumes:
+  mysql_data:
+  mongodb_data:
